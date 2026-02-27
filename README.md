@@ -1,4 +1,4 @@
-# EIRSAT-1 Thermal Telemetry — Week 01/02 Pipeline
+# EIRSAT-1 Thermal Telemetry — Week 01 Pipeline
 
 ## Project Summary
 This repository contains the Week 01 (SSOT + time integrity + leakage-safe chronological splits) and Week 02 (fault injection harness) implementation for EIRSAT-1 thermal telemetry coursework.
