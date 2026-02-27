@@ -1,0 +1,17 @@
+# Python venv + cache
+.venv/
+__pycache__/
+*.pyc
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Data (do NOT push large datasets/outputs)
+data/raw/
+data/processed/
+data/runs/
+
+# Large file types (optional safety)
+*.csv
+*.parquet
