@@ -21,17 +21,6 @@ Implement a deterministic thermal fault injection system that produces injected 
 
 ### Injection Configuration
 Configuration file:
----
-
-# Week 02 — Thermal Fault Injection Harness
-
-## Goal
-Implement a deterministic thermal fault injection system that produces injected telemetry and event labels without data leakage across dataset splits.
-
-## Implemented Components
-
-### Injection Configuration
-Configuration file:
 
 Defines:
 - run_id
