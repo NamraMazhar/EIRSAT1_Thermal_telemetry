@@ -95,3 +95,45 @@ Activate environment then run:
 python -m src.thermal_fault_injector
 python -m src.week02_summary
 pytest -q
+```
+
+---
+
+# Week 03 — Baseline Detection + Evaluation
+
+Goal: Implement a baseline anomaly detector and evaluate detection performance against injected thermal faults.
+
+Components added:
+
+- baseline_threshold.py  
+  Z-score based anomaly detector using training statistics.
+
+- eval_events.py  
+  Converts point alarms into predicted events and computes detection metrics.
+
+- week03_run_eval.py  
+  Runs full evaluation pipeline and produces metrics.
+
+- plot_alarms.py  
+  Generates timeline visualization of telemetry and alarms.
+
+Outputs generated:
+
+data/runs/R001/
+
+    metrics_table.csv
+    alarm_timeline.png
+
+Metrics computed:
+
+- Precision
+- Recall
+- EventF1
+- Mean Detection Delay (MDD)
+- False Alarm Bursts (FAB)
+
+Run Week03:
+
+python -m src.week03_run_eval
+python -m src.plot_alarms
+pytest -q
