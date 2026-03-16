@@ -137,3 +137,122 @@ Run Week03:
 python -m src.week03_run_eval
 python -m src.plot_alarms
 pytest -q
+
+# Week 04 — Baseline-2 Residual Detection + Comparative Evaluation
+
+## Goal
+Implement baseline-2 using orbit-cycle removal plus thresholding on the residual signal, then compare it against baseline-1 using event-based detection metrics.
+
+## Implemented Components
+
+### Configuration
+Configuration file:
+
+`configs/baseline2.yaml`
+
+Defines:
+- run_id
+- global seed
+- channels used
+- orbit period samples
+- phase bins
+- validation threshold candidates
+- frozen threshold
+
+### Orbit-cycle Baseline Estimator
+
+Fits a periodic baseline template using **training split only**.
+
+Implemented in:  
+`src/orbit_baseline.py`
+
+Features:
+- periodic template fit by phase
+- train-only fitting
+- forward application to validation/test
+- residual computation:
+  - residual = value − periodic_baseline
+
+### Residual Detector
+
+Applies thresholding on residual z-scores.
+
+Implemented in:  
+`src/baseline_residual.py`
+
+Features:
+- residual z-score computation
+- threshold-based anomaly alarms
+- uses training residual statistics only
+
+### Comparative Evaluation Engine
+
+Implemented in:  
+`src/week04_compare.py`
+
+Features:
+- runs baseline-1 on test
+- runs validation-only threshold sweep for baseline-2
+- freezes selected threshold
+- evaluates baseline-2 on test
+- generates comparative metrics table
+- stores threshold record and fit log
+
+### Diagnostic Plotting
+
+Implemented in:  
+`src/week04_plots.py`
+
+Generates:
+- raw vs residual plot
+- false alarm timeline
+
+### Unit Tests
+
+Implemented in:  
+`tests/test_week04.py`
+
+Checks:
+- threshold record exists
+- frozen threshold is not null
+- comparative table has both methods
+- required metric columns are present
+
+## Generated Outputs
+
+Running the Week 04 pipeline creates:
+
+`data/runs/R001/`
+
+- `comparative_metrics.csv`
+- `threshold_record.json`
+- `baseline2_fit_log.json`
+- `baseline2_detected_test.csv`
+- `raw_vs_residual_TEMP_CPU.png`
+- `false_alarm_timeline.png`
+
+## Comparative Results
+
+### Baseline-1
+- Precision = 0.00000
+- Recall = 0.0
+- EventF1 = 0.000000
+- MDD = NaN
+- FAB = 0
+
+### Baseline-2
+- Precision = 0.00268
+- Recall = 0.5
+- EventF1 = 0.005331
+- MDD = 240.0
+- FAB = 2233
+- Frozen threshold = 1.5
+
+## Reproduce Week04
+
+Activate environment then run:
+
+```powershell
+python -m src.week04_compare
+python -m src.week04_plots
+pytest -q
