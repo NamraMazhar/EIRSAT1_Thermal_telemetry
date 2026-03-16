@@ -1,6 +1,6 @@
 run_id: R001
 seed: 1337
-split_to_inject: train
+split_to_inject: test
 
 fault_types:
   bias: true
