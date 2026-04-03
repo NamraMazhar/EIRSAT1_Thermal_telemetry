@@ -253,6 +253,216 @@ Running the Week 04 pipeline creates:
 Activate environment then run:
 
 ```powershell
-python -m src.week04_compare
-python -m src.week04_plots
+- `python -m src.week04_compare`
+- `python -m src.week04_plots`
+- `pytest -q`
+```
+
+# Week 05 — ML Reconstruction Baseline + 3-Baseline Benchmark
+
+## Goal
+Implement baseline-3 using an unsupervised ML reconstruction model and produce the first 3-baseline benchmark table with time-aware evaluation.
+
+## Implemented Components
+
+### Configuration
+Configuration file:
+
+`configs/week05_ml.yaml`
+
+Defines:
+- run_id
+- global seed
+- channels used
+- hidden layer structure
+- max iterations
+- solver
+- validation threshold candidates
+- target validation alarm rate
+- representative channel for score plot
+
+### ML Reconstruction Baseline
+Implemented in:
+
+`src/baseline_ml.py`
+
+This module:
+- converts telemetry into wide per-timestamp feature matrices
+- fits an unsupervised reconstruction model on the training split only
+- computes reconstruction error scores
+- thresholds scores using training statistics
+- selects threshold on validation only
+
+### 3-Baseline Benchmark Runner
+Implemented in:
+
+`src/week05_benchmark.py`
+
+This script:
+- loads Week01 chronological splits
+- trains baseline-3 only on training data
+- tunes threshold on validation data
+- freezes threshold before test
+- evaluates baseline-3 on test using the same event harness as previous baselines
+- combines baseline-1, baseline-2, and baseline-3 into one benchmark table
+- logs training and inference runtime
+
+### Plotting
+Implemented in:
+
+`src/week05_plots.py`
+
+Generates:
+- score distribution comparison (train vs test)
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week05.py`
+
+Checks:
+- benchmark table contains at least 3 rows
+- required metric fields are present
+- runtime log exists and contains positive values
+- frozen threshold exists
+
+## Generated Outputs
+
+Running the Week 05 pipeline creates:
+
+`data/runs/R001/`
+
+- `ml_scores_train.csv`
+- `ml_scores_test.csv`
+- `week05_threshold_record.json`
+- `ml_runtime_log.json`
+- `benchmark_3baseline.csv`
+- `# Week 05 — ML Reconstruction Baseline + 3-Baseline Benchmark
+
+## Goal
+Implement baseline-3 using an unsupervised ML reconstruction model and produce the first 3-baseline benchmark table with time-aware evaluation.
+
+## Implemented Components
+
+### Configuration
+Configuration file:
+
+`configs/week05_ml.yaml`
+
+Defines:
+- run_id
+- global seed
+- channels used
+- hidden layer structure
+- max iterations
+- solver
+- validation threshold candidates
+- target validation alarm rate
+- representative channel for score plot
+
+### ML Reconstruction Baseline
+Implemented in:
+
+`src/baseline_ml.py`
+
+This module:
+- converts telemetry into wide per-timestamp feature matrices
+- fits an unsupervised reconstruction model on the training split only
+- computes reconstruction error scores
+- thresholds scores using training statistics
+- selects threshold on validation only
+
+### 3-Baseline Benchmark Runner
+Implemented in:
+
+`src/week05_benchmark.py`
+
+This script:
+- loads Week01 chronological splits
+- trains baseline-3 only on training data
+- tunes threshold on validation data
+- freezes threshold before test
+- evaluates baseline-3 on test using the same event harness as previous baselines
+- combines baseline-1, baseline-2, and baseline-3 into one benchmark table
+- logs training and inference runtime
+
+### Plotting
+Implemented in:
+
+`src/week05_plots.py`
+
+Generates:
+- score distribution comparison (train vs test)
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week05.py`
+
+Checks:
+- benchmark table contains at least 3 rows
+- required metric fields are present
+- runtime log exists and contains positive values
+- frozen threshold exists
+
+## Generated Outputs
+
+Running the Week 05 pipeline creates:
+
+`data/runs/R001/`
+
+- `ml_scores_train.csv`
+- `ml_scores_test.csv`
+- `week05_threshold_record.json`
+- `ml_runtime_log.json`
+- `benchmark_3baseline.csv`
+- `score_distribution_train_vs_test.png`
+
+## 3-Baseline Benchmark Results
+
+### Baseline-1
+- Precision = 0.00000
+- Recall = 0.000000
+- EventF1 = 0.000000
+- MDD = NaN
+- FAB = 0
+- Threshold = 3.0
+
+### Baseline-2
+- Precision = 0.00268
+- Recall = 0.500000
+- EventF1 = 0.005331
+- MDD = 240.0
+- FAB = 2233
+- Threshold = 1.5
+
+### Baseline-3
+- Precision = 0.02331
+- Recall = 0.833333
+- EventF1 = 0.045351
+- MDD = 402.0
+- FAB = 419
+- Threshold = 3.0
+
+## Runtime Logging
+- Train time = 4.791953900001317 sec
+- Infer time = 0.001968799999303883 sec
+
+## Reproducibility
+Deterministic settings:
+- fixed seed = 1337
+- no random shuffle across splits
+- train-only fitting
+- validation-only threshold tuning
+- frozen threshold on test
+
+Saved score file hashes were checked across reruns to verify deterministic outputs.
+
+## Reproduce Week05
+
+Run:
+
+```powershell
+python -m src.week05_benchmark
+python -m src.week05_plots
 pytest -q
