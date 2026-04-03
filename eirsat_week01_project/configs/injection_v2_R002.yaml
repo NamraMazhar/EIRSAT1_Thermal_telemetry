@@ -1,0 +1,41 @@
+run_id: R002
+seed: 1337
+split_to_inject: test
+schema_version: schema_v0_2
+
+mixed_faults_enabled: false
+dropout_handling_policy: interpolate_linear
+
+fault_types:
+  bias: true
+  drift: true
+  lag: true
+  stuck_at: true
+  dropout: true
+  noise_increase: true
+
+magnitude_tiers:
+  small: 2.0
+  medium: 4.0
+  large: 6.0
+
+duration_tiers:
+  short: 20
+  medium: 40
+  long: 80
+
+drift_slope_scale:
+  small: 0.03
+  medium: 0.06
+  large: 0.10
+
+min_separation_samples: 25
+events_per_channel: 2
+
+allowed_channels:
+  - TEMP_BAT
+  - TEMP_CPU
+  - TEMP_PANEL_X
+  - TEMP_PANEL_Y
+  - TEMP_PAYLOAD
+  - TEMP_STRUCTURE
