@@ -1,0 +1,28 @@
+run_id: R203
+seed: 1337
+split_to_inject: test
+schema_version: schema_v0_2
+mixed_faults_enabled: false
+dropout_handling_policy: interpolate_linear
+fault_types:
+  bias: true
+  drift: false
+  lag: false
+  stuck_at: false
+  dropout: false
+  noise_increase: false
+magnitude_tiers:
+  small: 1.0
+duration_tiers:
+  long: 60
+drift_slope_scale:
+  small: 0.02
+min_separation_samples: 20
+events_per_channel: 2
+allowed_channels:
+- TEMP_BAT
+- TEMP_CPU
+- TEMP_PANEL_X
+- TEMP_PANEL_Y
+- TEMP_PAYLOAD
+- TEMP_STRUCTURE
