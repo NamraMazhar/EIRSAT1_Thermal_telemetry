@@ -721,3 +721,130 @@ python -m src.week07_summary_plots
 python -m src.week07_failure_analysis
 python -m src.week07_results_index
 pytest -q
+````
+
+# Week 08 — Ablation Set B: Magnitude + Duration Sensitivity Sweep
+
+## Goal
+Run Ablation Set B by sweeping fault magnitude and duration for two fault types, then produce sensitivity curves for EventF1, MDD, and FAB.
+
+## Implemented Components
+
+### Grid Config Generation
+Implemented in:
+
+`src/week08_generate_configs.py`
+
+This script creates 18 frozen configs covering:
+
+- fault types: `bias`, `drift`
+- magnitudes: `small`, `medium`, `large`
+- durations: `short`, `medium`, `long`
+
+Run IDs:
+- `R201`–`R209` → bias sweep
+- `R210`–`R218` → drift sweep
+
+It also creates:
+
+- `data/runs/week08_config_index.csv`
+
+### Grid Run Generation
+Implemented in:
+
+`src/week08_generate_grid.py`
+
+This script generates all 18 injected runs using the Week06 injector v2.
+
+### Full Grid Evaluation
+Implemented in:
+
+`src/week08_run_grid_methods.py`
+
+This script evaluates all three methods for every config:
+
+- baseline-1: raw threshold
+- baseline-2: residual threshold
+- baseline-3: ML reconstruction
+
+For each run it stores:
+- Precision
+- Recall
+- EventF1
+- MDD
+- FAB
+- Threshold
+
+Outputs:
+- `data/runs/week08_grid_results.csv`
+- `data/runs/week08_threshold_tuning.csv`
+
+### Sensitivity Plots
+Implemented in:
+
+`src/week08_make_plots.py`
+
+Generated plots:
+- `week08_eventf1_vs_magnitude.png`
+- `week08_mdd_vs_duration.png`
+- `week08_fab_vs_threshold.png`
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week08.py`
+
+Checks:
+- results table exists
+- threshold tuning file exists
+- all 3 plots exist
+- grid coverage includes at least 18 run IDs
+
+## Generated Outputs
+
+Global Week08 outputs:
+- `data/runs/week08_config_index.csv`
+- `data/runs/week08_grid_results.csv`
+- `data/runs/week08_threshold_tuning.csv`
+- `data/runs/week08_eventf1_vs_magnitude.png`
+- `data/runs/week08_mdd_vs_duration.png`
+- `data/runs/week08_fab_vs_threshold.png`
+
+Run folders created:
+- `data/runs/R201/` to `data/runs/R218/`
+
+## Experimental Grid
+Week08 evaluates:
+
+- 2 fault types
+- 3 magnitudes
+- 3 durations
+
+Total configurations:
+
+- `2 × 3 × 3 = 18`
+
+With 3 methods per configuration, the benchmark table contains:
+
+- `18 × 3 = 54` evaluated entries
+
+## Observed Pattern
+Initial Week08 outputs continue the same broad trend seen earlier:
+
+- baseline-1 remains too conservative
+- baseline-2 improves recall but produces very high FAB
+- baseline-3 remains the strongest overall method
+
+This week adds sensitivity evidence showing how method performance changes as fault severity changes.
+
+## Reproduce Week08
+
+Run:
+
+```powershell
+python -m src.week08_generate_configs
+python -m src.week08_generate_grid
+python -m src.week08_run_grid_methods
+python -m src.week08_make_plots
+pytest -q
+````
