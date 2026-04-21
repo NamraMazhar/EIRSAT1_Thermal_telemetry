@@ -710,40 +710,6 @@ Global Week07 outputs:
 - `data/runs/week07_failure_cases.csv`
 - `data/runs/week07_results_index.csv`
 
-## Week07 Ablation Results
-
-### Bias (R101)
-- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
-- baseline-2: Precision = 0.002676, Recall = 0.500000, EventF1 = 0.005324, MDD = 0.0, FAB = 2236
-- baseline-3: Precision = 0.025424, Recall = 1.000000, EventF1 = 0.049587, MDD = 0.0, FAB = 460
-
-### Drift (R102)
-- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
-- baseline-2: Precision = 0.002642, Recall = 0.500000, EventF1 = 0.005256, MDD = 420.0, FAB = 2265
-- baseline-3: Precision = 0.027586, Recall = 1.000000, EventF1 = 0.053691, MDD = 1020.0, FAB = 423
-
-### Lag (R103)
-- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
-- baseline-2: Precision = 0.002671, Recall = 0.500000, EventF1 = 0.005314, MDD = 440.0, FAB = 2240
-- baseline-3: Precision = 0.022059, Recall = 0.750000, EventF1 = 0.042857, MDD = 1066.666667, FAB = 399
-
-### Stuck-at (R104)
-- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
-- baseline-2: Precision = 0.002675, Recall = 0.500000, EventF1 = 0.005321, MDD = 330.0, FAB = 2237
-- baseline-3: Precision = 0.022945, Recall = 1.000000, EventF1 = 0.044860, MDD = 650.0, FAB = 511
-
-### Dropout (R105)
-- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
-- baseline-2: Precision = 0.002673, Recall = 0.500000, EventF1 = 0.005317, MDD = 150.0, FAB = 2239
-- baseline-3: Precision = 0.017544, Recall = 0.583333, EventF1 = 0.034063, MDD = 685.714286, FAB = 392
-
-## Key Observations
-- baseline-1 failed across all five fault types
-- baseline-2 improved recall but retained extremely high false-alarm burden
-- baseline-3 was the strongest overall method across all fault types
-- drift and bias were the strongest fault types for baseline-3 by EventF1
-- dropout remained one of the more challenging fault types
-
 ## Reproduce Week07
 
 Run:
