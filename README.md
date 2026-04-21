@@ -591,3 +591,167 @@ python -m src.thermal_fault_injector_v2 configs/injection_v2_R003.yaml
 python -m src.week06_run_all
 python -m src.week06_plot_tradeoff
 pytest -q
+```
+
+# Week 07 — Ablation Set A: Fault-Type Sweep + Failure Analysis
+
+## Goal
+Run Ablation Set A by fixing severity and varying only fault type, then evaluate how each method performs across bias, drift, lag, stuck_at, and dropout faults.
+
+## Implemented Components
+
+### Frozen Fault-Type Configs
+The following ablation configs were created:
+
+- `configs/ablation_A_bias.yaml`
+- `configs/ablation_A_drift.yaml`
+- `configs/ablation_A_lag.yaml`
+- `configs/ablation_A_stuck_at.yaml`
+- `configs/ablation_A_dropout.yaml`
+
+Run mapping:
+- `R101` → bias
+- `R102` → drift
+- `R103` → lag
+- `R104` → stuck_at
+- `R105` → dropout
+
+All runs use:
+- fixed seed = 1337
+- fixed split = test
+- fixed medium magnitude and medium duration
+- same event count and same channel set
+- only fault type changes
+
+### Ablation Run Generation
+Implemented in:
+
+`src/week07_generate_ablation_A.py`
+
+This script generates all five fault-type-specific injected runs using the Week06 injector v2.
+
+### Multi-Method Evaluation
+Implemented in:
+
+`src/week07_run_methods.py`
+
+This script evaluates all three methods across all five runs:
+- baseline-1: raw threshold
+- baseline-2: residual threshold
+- baseline-3: ML reconstruction
+
+Outputs:
+- Precision
+- Recall
+- EventF1
+- MDD
+- FAB
+- Threshold
+
+### Summary Plots
+Implemented in:
+
+`src/week07_summary_plots.py`
+
+Generates:
+- `week07_faulttype_eventf1.png`
+- `week07_faulttype_mdd.png`
+- `week07_faulttype_fab.png`
+
+### Failure Analysis
+Implemented in:
+
+`src/week07_failure_analysis.py`
+
+Creates:
+- `week07_failure_cases.csv`
+
+This file stores representative FN/FP cases for later annotation and paper figures.
+
+### Results Index
+Implemented in:
+
+`src/week07_results_index.py`
+
+Creates:
+- `week07_results_index.csv`
+
+This maps:
+- run_id
+- config file
+- telemetry output
+- event file
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week07.py`
+
+Checks:
+- ablation results file exists
+- 5 fault types are present
+- failure cases file exists
+- results index exists
+
+## Generated Outputs
+
+Run folders:
+- `data/runs/R101/`
+- `data/runs/R102/`
+- `data/runs/R103/`
+- `data/runs/R104/`
+- `data/runs/R105/`
+
+Global Week07 outputs:
+- `data/runs/week07_ablation_results.csv`
+- `data/runs/week07_faulttype_eventf1.png`
+- `data/runs/week07_faulttype_mdd.png`
+- `data/runs/week07_faulttype_fab.png`
+- `data/runs/week07_failure_cases.csv`
+- `data/runs/week07_results_index.csv`
+
+## Week07 Ablation Results
+
+### Bias (R101)
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002676, Recall = 0.500000, EventF1 = 0.005324, MDD = 0.0, FAB = 2236
+- baseline-3: Precision = 0.025424, Recall = 1.000000, EventF1 = 0.049587, MDD = 0.0, FAB = 460
+
+### Drift (R102)
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002642, Recall = 0.500000, EventF1 = 0.005256, MDD = 420.0, FAB = 2265
+- baseline-3: Precision = 0.027586, Recall = 1.000000, EventF1 = 0.053691, MDD = 1020.0, FAB = 423
+
+### Lag (R103)
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002671, Recall = 0.500000, EventF1 = 0.005314, MDD = 440.0, FAB = 2240
+- baseline-3: Precision = 0.022059, Recall = 0.750000, EventF1 = 0.042857, MDD = 1066.666667, FAB = 399
+
+### Stuck-at (R104)
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002675, Recall = 0.500000, EventF1 = 0.005321, MDD = 330.0, FAB = 2237
+- baseline-3: Precision = 0.022945, Recall = 1.000000, EventF1 = 0.044860, MDD = 650.0, FAB = 511
+
+### Dropout (R105)
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002673, Recall = 0.500000, EventF1 = 0.005317, MDD = 150.0, FAB = 2239
+- baseline-3: Precision = 0.017544, Recall = 0.583333, EventF1 = 0.034063, MDD = 685.714286, FAB = 392
+
+## Key Observations
+- baseline-1 failed across all five fault types
+- baseline-2 improved recall but retained extremely high false-alarm burden
+- baseline-3 was the strongest overall method across all fault types
+- drift and bias were the strongest fault types for baseline-3 by EventF1
+- dropout remained one of the more challenging fault types
+
+## Reproduce Week07
+
+Run:
+
+```powershell
+python -m src.week07_generate_ablation_A
+python -m src.week07_run_methods
+python -m src.week07_summary_plots
+python -m src.week07_failure_analysis
+python -m src.week07_results_index
+pytest -q
