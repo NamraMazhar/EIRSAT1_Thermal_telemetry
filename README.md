@@ -466,3 +466,128 @@ Run:
 python -m src.week05_benchmark
 python -m src.week05_plots
 pytest -q
+```
+
+# Week 06 — Multi-Run Robust Results Pack + Injection Protocol v0.2
+
+## Goal
+Refine injection realism and protocol v0.2, then produce the first robust results pack across multiple injection settings.
+
+## Implemented Components
+
+### Injection Protocol v0.2
+Three frozen configuration files were created:
+
+- `configs/injection_v2_R001.yaml`
+- `configs/injection_v2_R002.yaml`
+- `configs/injection_v2_R003.yaml`
+
+These define:
+- run_id
+- global seed
+- split to inject
+- fault magnitudes and durations
+- controlled drift slope scaling
+- optional mixed-fault setting
+- dropout handling policy
+- allowed channels
+
+### Injector v2
+Implemented in:
+
+`src/thermal_fault_injector_v2.py`
+
+Features:
+- deterministic event generation
+- controlled drift refinement
+- optional mixed faults
+- dropout handling policy
+- reproducible telemetry and events generation
+- schema version `schema_v0_2`
+
+### Multi-Run Evaluation
+Implemented in:
+
+`src/week06_run_all.py`
+
+This script:
+- loads R001, R002, R003
+- evaluates all three baselines for each run
+- produces a consolidated results table with 9 rows total
+
+### Trade-off Plot
+Implemented in:
+
+`src/week06_plot_tradeoff.py`
+
+This script generates:
+- `FAB vs EventF1` plot
+- labeled run_id points
+- method-wise comparison
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week06.py`
+
+Checks:
+- consolidated results file exists
+- 9+ rows present
+- 3 run_ids present
+- trade-off plot exists
+
+## Generated Outputs
+
+Outputs created:
+
+`data/runs/R001/`
+- `telemetry_inj.csv`
+- `events.json`
+
+`data/runs/R002/`
+- `telemetry_inj.csv`
+- `events.json`
+
+`data/runs/R003/`
+- `telemetry_inj.csv`
+- `events.json`
+
+Global Week06 outputs:
+- `data/runs/week06_consolidated_results.csv`
+- `data/runs/week06_tradeoff_plot.png`
+
+## Consolidated Results
+
+### R001
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002658, Recall = 0.500000, EventF1 = 0.005289, MDD = 250.0, FAB = 2251
+- baseline-3: Precision = 0.018595, Recall = 0.750000, EventF1 = 0.036290, MDD = 560.0, FAB = 475
+
+### R002
+- baseline-1: Precision = 0.500000, Recall = 0.083333, EventF1 = 0.142857, MDD = 2940.0, FAB = 1
+- baseline-2: Precision = 0.002676, Recall = 0.500000, EventF1 = 0.005324, MDD = 300.0, FAB = 2236
+- baseline-3: Precision = 0.020305, Recall = 1.000000, EventF1 = 0.039801, MDD = 635.0, FAB = 579
+
+### R003
+- baseline-1: Precision = 0.000000, Recall = 0.000000, EventF1 = 0.000000, MDD = NaN, FAB = 0
+- baseline-2: Precision = 0.002692, Recall = 0.500000, EventF1 = 0.005355, MDD = 50.0, FAB = 2223
+- baseline-3: Precision = 0.014981, Recall = 1.000000, EventF1 = 0.029520, MDD = 260.0, FAB = 789
+
+## Reproducibility
+A selected run (`R002`) was regenerated and the hashes of:
+- `telemetry_inj.csv`
+- `events.json`
+
+matched exactly across reruns, confirming deterministic multi-run generation.
+
+## Reproduce Week06
+
+Run:
+
+```powershell
+python -m src.thermal_fault_injector_v2 configs/injection_v2_R001.yaml
+python -m src.thermal_fault_injector_v2 configs/injection_v2_R002.yaml
+python -m src.thermal_fault_injector_v2 configs/injection_v2_R003.yaml
+python -m src.week06_run_all
+python -m src.week06_plot_tradeoff
+pytest -q
