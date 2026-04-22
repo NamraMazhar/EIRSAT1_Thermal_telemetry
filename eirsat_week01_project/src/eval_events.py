@@ -99,3 +99,39 @@ def compute_metrics(pred_events, true_events):
     mdd = np.mean(delays) if len(delays) > 0 else None
 
     return precision, recall, f1, mdd, FP
+
+def alarms_to_events_minlen(df, min_len=1):
+    events = alarms_to_events(df)
+
+    if len(events) == 0:
+        return events
+
+    events = events.copy()
+    events["start"] = pd.to_datetime(events["start"])
+    events["end"] = pd.to_datetime(events["end"])
+
+    durations = (events["end"] - events["start"]).dt.total_seconds()
+
+    # assuming 60-second cadence; min_len=3 means >= 2 intervals = 120 sec
+    min_seconds = max(0, (min_len - 1) * 60)
+
+    events = events[durations >= min_seconds].copy()
+    return events.reset_index(drop=True)
+
+def smooth_alarm_series(df, window=5):
+    """
+    Apply per-channel median-like smoothing to boolean alarms.
+    Uses rolling mean > 0.5 as a simple denoising step.
+    """
+    df = df.copy()
+    out_frames = []
+
+    for ch in df["channel"].unique():
+        ch_df = df[df["channel"] == ch].sort_values("timestamp").copy()
+        alarm_num = ch_df["alarm"].astype(int)
+        smooth = alarm_num.rolling(window=window, min_periods=1, center=True).mean()
+        ch_df["alarm"] = smooth > 0.5
+        out_frames.append(ch_df)
+
+    out = pd.concat(out_frames, ignore_index=True)
+    return out.sort_values(["channel", "timestamp"]).reset_index(drop=True)

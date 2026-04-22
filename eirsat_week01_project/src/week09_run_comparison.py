@@ -14,7 +14,12 @@ from src.baseline_ml import (
     choose_threshold_on_validation,
 )
 from src.proposed_method import detect_proposed
-from src.eval_events import alarms_to_events, compute_metrics
+from src.eval_events import (
+    alarms_to_events,
+    alarms_to_events_minlen,
+    smooth_alarm_series,
+    compute_metrics,
+)
 
 
 def load_yaml(path):
@@ -79,10 +84,11 @@ def main():
             if len(tr_ch) == 0 or len(te_ch) == 0:
                 continue
             detected, _ = detect_residual_alarms(
-                tr_ch, te_ch,
+                tr_ch,
+                te_ch,
                 orbit_period_samples=int(b2_cfg["orbit_period_samples"]),
                 phase_bins=int(b2_cfg["phase_bins"]),
-                threshold=float(best_threshold_b2)
+                threshold=float(best_threshold_b2),
             )
             all_test.append(detected)
 
@@ -102,7 +108,7 @@ def main():
             hidden_layers=ml_cfg["hidden_layers"],
             max_iter=int(ml_cfg["max_iter"]),
             solver=ml_cfg["solver"],
-            seed=int(ml_cfg["seed"])
+            seed=int(ml_cfg["seed"]),
         )
 
         train_score_wide, _ = reconstruct_scores(bundle, train_wide)
@@ -113,7 +119,7 @@ def main():
             train_score_wide,
             val_score_wide,
             ml_cfg["val_threshold_candidates"],
-            target_alarm_rate=float(ml_cfg["target_val_alarm_rate"])
+            target_alarm_rate=float(ml_cfg["target_val_alarm_rate"]),
         )
 
         test_scores_long = threshold_scores(train_score_wide, test_score_wide, thr_ml)
@@ -121,7 +127,7 @@ def main():
         p3, r3, f13, mdd3, fab3 = compute_metrics(b3_pred, true_events)
         all_rows.append(metric_row(run_id, "baseline_3_ml_reconstruction", p3, r3, f13, mdd3, fab3, thr_ml))
 
-        # proposed method
+        # proposed method refined v2
         all_prop = []
         for ch in prop_cfg["channels_used"]:
             tr_ch = train[train["channel"] == ch].copy()
@@ -129,17 +135,22 @@ def main():
             if len(tr_ch) == 0 or len(te_ch) == 0:
                 continue
             detected = detect_proposed(
-                tr_ch, te_ch,
+                tr_ch,
+                te_ch,
                 orbit_period_samples=int(prop_cfg["orbit_period_samples"]),
                 smoothing_window=int(prop_cfg["smoothing_window"]),
-                threshold=2.5
+                threshold=4.0,
             )
             all_prop.append(detected)
 
         prop_detected = pd.concat(all_prop, ignore_index=True)
-        prop_pred = alarms_to_events(prop_detected)
+        prop_detected = smooth_alarm_series(prop_detected, window=5)
+        prop_pred = alarms_to_events_minlen(
+            prop_detected,
+            min_len=int(prop_cfg["min_event_len"])
+        )
         pp, pr, pf1, pmdd, pfab = compute_metrics(prop_pred, true_events)
-        all_rows.append(metric_row(run_id, "proposed_residual_learning", pp, pr, pf1, pmdd, pfab, 2.5))
+        all_rows.append(metric_row(run_id, "proposed_residual_learning_refined_v2", pp, pr, pf1, pmdd, pfab, 4.0))
 
     out_df = pd.DataFrame(all_rows)
     out_df.to_csv(root / "data" / "runs" / "week09_stress_results.csv", index=False)

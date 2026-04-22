@@ -11,7 +11,8 @@ channels_used:
 
 orbit_period_samples: 90
 phase_bins: 90
-smoothing_window: 9
+smoothing_window: 15
+min_event_len: 5
 
 val_threshold_candidates:
   - 1.5
