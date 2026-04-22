@@ -848,3 +848,106 @@ python -m src.week08_run_grid_methods
 python -m src.week08_make_plots
 pytest -q
 ````
+# Week 09 — Proposed Method + Robustness Stress Tests
+
+## Goal
+Implement a proposed residual-learning method and compare it against the three baselines under robustness stress tests for timing/orbit-phase, missingness, and noise.
+
+## Implemented Components
+
+### Proposed Method
+Implemented in:
+
+`src/proposed_method.py`
+
+This method:
+- fits a periodic baseline on training data only
+- estimates expected residual behavior
+- computes residual-based anomaly scores
+- detects faults on residuals
+
+### Stress Run Generation
+Implemented in:
+
+`src/week09_generate_stress_runs.py`
+
+Generated stress runs:
+- `RS01` → timing / orbit-phase shift
+- `RS02` → missingness stress
+- `RS03` → noise stress
+
+### 4-Method Comparison
+Implemented in:
+
+`src/week09_run_comparison.py`
+
+Methods included:
+- baseline-1: raw threshold
+- baseline-2: residual threshold
+- baseline-3: ML reconstruction
+- proposed: residual learning
+
+Output:
+- `data/runs/week09_stress_results.csv`
+
+### Trade-off Plots
+Implemented in:
+
+`src/week09_tradeoff_plots.py`
+
+Generated:
+- `week09_eventf1_vs_fab.png`
+- `week09_mdd_vs_fab.png`
+
+### Main Results Table
+Implemented in:
+
+`src/week09_main_table.py`
+
+Generated:
+- `week09_main_results_table.csv`
+- `week09_stress_matrix.csv`
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week09.py`
+
+Checks:
+- stress results exist
+- main table exists
+- at least 4 methods are present
+- at least 3 stress dimensions are present
+- trade-off plots exist
+
+## Generated Outputs
+
+Global Week09 outputs:
+- `data/runs/week09_stress_results.csv`
+- `data/runs/week09_main_results_table.csv`
+- `data/runs/week09_stress_matrix.csv`
+- `data/runs/week09_eventf1_vs_fab.png`
+- `data/runs/week09_mdd_vs_fab.png`
+
+Stress run folders:
+- `data/runs/RS01/`
+- `data/runs/RS02/`
+- `data/runs/RS03/`
+
+## Key Observations
+- baseline-3 remains the strongest overall balanced method
+- the proposed method achieved very high recall across all stress settings
+- however, the proposed method currently suffers from excessive false alarm burden
+- missingness and noise are particularly difficult for the proposed method
+- Week09 therefore shows a strong robustness trade-off rather than a clean proposed-method win
+
+## Reproduce Week09
+
+Run:
+
+```powershell
+python -m src.week09_generate_stress_runs
+python -m src.week09_run_comparison
+python -m src.week09_tradeoff_plots
+python -m src.week09_main_table
+pytest -q
