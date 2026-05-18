@@ -955,4 +955,111 @@ python -m src.week09_main_table
 pytest -q
 ```
 
+# Week 10 — Paper-Ready Packaging
+
+## Goal
+Stabilize figures and tables, tighten the methodology/results packaging, and ensure reproducibility artifacts are complete and consistent.
+
+## Implemented Components
+
+### Standardized Figures
+Implemented in:
+
+`src/week10_make_figures.py`
+
+Generated figures:
+- `docs/paper_fig_tradeoff.png`
+- `docs/paper_fig_faulttype_sweep.png`
+- `docs/paper_fig_sensitivity.png`
+
+These figures standardize:
+- titles
+- axis labels
+- naming
+- paper-oriented formatting
+
+### Standardized Tables
+Implemented in:
+
+`src/week10_make_tables.py`
+
+Generated tables:
+- `docs/paper_table_main_results.csv`
+- `docs/paper_table_ablation_summary.csv`
+- `docs/paper_table_robustness_summary.csv`
+
+These consolidate:
+- main robustness results
+- fault-type ablation summary
+- robustness summary
+
+### Runbook
+Created:
+
+`docs/RUNBOOK.md`
+
+This runbook provides step-by-step instructions from environment setup through generation of the main benchmark artifacts.
+
+### Repro Manifest
+Implemented in:
+
+`src/week10_clean_exports.py`
+
+Generated:
+- `docs/repro_manifest.csv`
+
+This manifest lists exact artifact paths for:
+- figures
+- tables
+- key injected data files
+- main results files
+
+### Dry-Run Validation
+Implemented in:
+
+`src/week10_dryrun_check.py`
+
+This script verifies:
+- required Python modules are available
+- standardized figures exist
+- standardized tables exist
+- runbook and manifest exist
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week10.py`
+
+Checks:
+- figure files exist
+- table files exist
+- runbook exists
+- repro manifest exists
+
+## Generated Outputs
+
+### Figures
+- `docs/paper_fig_tradeoff.png`
+- `docs/paper_fig_faulttype_sweep.png`
+- `docs/paper_fig_sensitivity.png`
+
+### Tables
+- `docs/paper_table_main_results.csv`
+- `docs/paper_table_ablation_summary.csv`
+- `docs/paper_table_robustness_summary.csv`
+
+### Reproducibility Artifacts
+- `docs/RUNBOOK.md`
+- `docs/repro_manifest.csv`
+
+## Validation
+The packaging pipeline was validated with:
+
+```powershell
+python -m src.week10_make_figures
+python -m src.week10_make_tables
+python -m src.week10_clean_exports
+python -m src.week10_dryrun_check
+pytest -q
+```
 
