@@ -1180,4 +1180,132 @@ python -m src.week11_fastpath_run
 python -m src.week11_risk_register
 pytest -q
 ```
+# Week 12 — Final Submission Lock + Release Candidate
 
+## Goal
+Freeze the final config set, export final paper-ready artifacts, verify deterministic packaging support, and complete the release-candidate checks for submission.
+
+## Implemented Components
+
+### Final Frozen Config Set
+Implemented in:
+
+`src/week12_freeze_final_set.py`
+
+Frozen files:
+- `FINAL/configs/final_injection_config.yaml`
+- `FINAL/configs/final_eval_config.yaml`
+- `FINAL/configs/final_proposed_config.yaml`
+
+This defines the single declared final config set used for the submission package.
+
+### Final Artifact Export
+Implemented in:
+
+`src/week12_make_final_artifacts.py`
+
+Exported files:
+- `FINAL/artifacts/final_telemetry_inj.csv`
+- `FINAL/artifacts/final_events.json`
+- `FINAL/artifacts/final_main_results_table.csv`
+- `FINAL/artifacts/final_tradeoff_plot.png`
+- `FINAL/artifacts/final_faulttype_plot.png`
+- `FINAL/artifacts/final_sensitivity_plot.png`
+
+Supporting files were also exported for selected final runs.
+
+### Final Hash Capture
+Implemented in:
+
+`src/week12_hash_check.py`
+
+Generated:
+- `FINAL/artifacts/final_hashes.csv`
+
+This records SHA256 hashes for the frozen final configs and exported final artifacts.
+
+### Release Candidate Runner
+Implemented in:
+
+`src/week12_release_candidate.py`
+
+Generated:
+- `docs/final_release_candidate_log.txt`
+
+This reruns the final lock workflow and logs:
+- executed commands
+- total runtime
+- success status
+
+### Final QA
+Implemented in:
+
+`src/week12_final_qa.py`
+
+Generated:
+- `docs/final_qa_summary.txt`
+
+Checks include:
+- final config files present
+- final artifacts present
+- final definitions present
+- final hashes present
+- final main results table contains expected columns
+
+### Final Runbook + Replication Checklist
+Created:
+- `docs/final_runbook.md`
+- `docs/final_replication_checklist.md`
+
+These provide:
+- final release steps
+- replication checklist
+- exact command sequence for verifier/submission use
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week12.py`
+
+Checks:
+- final configs exist
+- final artifacts exist
+- final hashes file exists
+- release candidate log shows success
+- final QA status is PASS
+- final runbook/checklist exist
+
+## Generated Outputs
+
+### Final Configs
+- `FINAL/configs/final_injection_config.yaml`
+- `FINAL/configs/final_eval_config.yaml`
+- `FINAL/configs/final_proposed_config.yaml`
+
+### Final Artifacts
+- `FINAL/artifacts/final_telemetry_inj.csv`
+- `FINAL/artifacts/final_events.json`
+- `FINAL/artifacts/final_main_results_table.csv`
+- `FINAL/artifacts/final_tradeoff_plot.png`
+- `FINAL/artifacts/final_faulttype_plot.png`
+- `FINAL/artifacts/final_sensitivity_plot.png`
+- `FINAL/artifacts/final_hashes.csv`
+
+### Final Documentation
+- `docs/final_runbook.md`
+- `docs/final_replication_checklist.md`
+- `docs/final_release_candidate_log.txt`
+- `docs/final_qa_summary.txt`
+
+## Validation
+
+Run:
+
+```powershell
+python -m src.week12_freeze_final_set
+python -m src.week12_make_final_artifacts
+python -m src.week12_hash_check
+python -m src.week12_release_candidate
+python -m src.week12_final_qa
+pytest -q
+``` 
