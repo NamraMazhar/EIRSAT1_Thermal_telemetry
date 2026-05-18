@@ -1,0 +1,32 @@
+run_id_default: R001
+seed: 1337
+
+channels_used:
+  - TEMP_BAT
+  - TEMP_CPU
+  - TEMP_PANEL_X
+  - TEMP_PANEL_Y
+  - TEMP_PAYLOAD
+  - TEMP_STRUCTURE
+
+orbit_period_samples: 90
+phase_bins: 90
+smoothing_window: 15
+min_event_len: 5
+
+val_threshold_candidates:
+  - 1.5
+  - 2.0
+  - 2.5
+  - 3.0
+  - 3.5
+  - 4.0
+
+target_val_alarm_rate: 0.01
+
+stress_runs:
+  - RS01
+  - RS02
+  - RS03
+
+schema_version: week09_proposed_v0_1

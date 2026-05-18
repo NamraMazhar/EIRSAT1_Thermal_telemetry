@@ -1,0 +1,31 @@
+run_id_default: R001
+seed: 1337
+
+metrics:
+  - Precision
+  - Recall
+  - EventF1
+  - MDD
+  - FAB
+
+event_matching:
+  overlap_rule: any_overlap
+  delay_reference: predicted_start_minus_event_start
+  allow_negative_mdd: true
+
+fab_definition:
+  unit: count
+  normalization: per_run_window
+
+split_policy:
+  train: chronological
+  val: chronological
+  test: chronological
+
+methods:
+  - baseline_1_raw_threshold
+  - baseline_2_residual_threshold
+  - baseline_3_ml_reconstruction
+  - proposed_residual_learning_refined_v2
+
+schema_version: eval_v0_1
