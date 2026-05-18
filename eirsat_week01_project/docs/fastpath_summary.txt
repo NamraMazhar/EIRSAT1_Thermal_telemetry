@@ -1,0 +1,4 @@
+RUN D:\EIRSAT1_Thermal_telemetry\eirsat_week01_project\.venv\Scripts\python.exe -m src.week10_make_figures
+RUN D:\EIRSAT1_Thermal_telemetry\eirsat_week01_project\.venv\Scripts\python.exe -m src.week10_make_tables
+RUN D:\EIRSAT1_Thermal_telemetry\eirsat_week01_project\.venv\Scripts\python.exe -m src.week10_clean_exports
+RUN D:\EIRSAT1_Thermal_telemetry\eirsat_week01_project\.venv\Scripts\python.exe -m src.week10_dryrun_check

@@ -1,0 +1,64 @@
+{
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "os_name": "Windows",
+  "pandas_version": "3.0.1",
+  "numpy_version": "2.4.2",
+  "yaml_version": "6.0.3",
+  "matplotlib_version": "3.10.8",
+  "sklearn_version": "1.8.0",
+  "seed": 1337,
+  "run_ids": [
+    "R001",
+    "R002",
+    "R003",
+    "R101",
+    "R102",
+    "R103",
+    "R104",
+    "R105",
+    "R201",
+    "R202",
+    "R203",
+    "R204",
+    "R205",
+    "R206",
+    "R207",
+    "R208",
+    "R209",
+    "R210",
+    "R211",
+    "R212",
+    "R213",
+    "R214",
+    "R215",
+    "R216",
+    "R217",
+    "R218",
+    "RS01",
+    "RS02",
+    "RS03"
+  ],
+  "split_ranges": {
+    "schema_version": "split_v0_1",
+    "policy": {
+      "type": "chronological_blocks",
+      "train_fraction": 0.7,
+      "val_fraction": 0.15,
+      "test_fraction": 0.15,
+      "no_shuffle": true
+    },
+    "train": {
+      "start": "2023-01-01 00:00:00",
+      "end": "2023-01-22 00:00:00"
+    },
+    "val": {
+      "start": "2023-01-22 00:00:00",
+      "end": "2023-01-26 12:00:00"
+    },
+    "test": {
+      "start": "2023-01-26 12:00:00",
+      "end": "2023-01-31 00:00:00"
+    }
+  }
+}
