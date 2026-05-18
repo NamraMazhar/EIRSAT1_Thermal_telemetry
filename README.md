@@ -1062,4 +1062,122 @@ python -m src.week10_clean_exports
 python -m src.week10_dryrun_check
 pytest -q
 ```
+# Week 11 — Verifier Hardening + Reproducibility Closure
+
+## Goal
+Close remaining reproducibility gaps, harden validation, and finalize verifier-facing documentation.
+
+## Implemented Components
+
+### Config Validation
+Implemented in:
+
+`src/week11_validate_configs.py`
+
+Validated config files:
+- injector config
+- eval config
+
+Checks include:
+- required fields present
+- valid metric list
+- overlap rule present
+- FAB normalization present
+- non-empty channel list
+
+Invalid configs fail with non-zero exit.
+
+### Metadata Capture
+Implemented in:
+
+`src/week11_capture_metadata.py`
+
+Generated:
+- `docs/repro_metadata.json`
+
+Captured metadata includes:
+- Python version
+- OS / platform
+- package versions
+- seed
+- run IDs
+- split ranges
+
+### Final Definitions
+Created:
+
+`docs/final_definitions.md`
+
+This file finalizes:
+- event matching rule
+- EventF1 interpretation
+- MDD definition
+- FAB definition
+- chronological split policy
+- no inflated scoring statement
+
+### Repro Audit
+Implemented in:
+
+`src/week11_repro_audit.py`
+
+Generated:
+- `docs/repro_audit.csv`
+
+This audit lists key replication artifacts and whether each exists.
+
+### Bounded Fast-Path Run
+Implemented in:
+
+`src/week11_fastpath_run.py`
+
+Generated:
+- `docs/fastpath_summary.txt`
+
+This script reruns the main paper-packaging pipeline in a bounded command chain:
+- figures
+- tables
+- repro manifest
+- dry-run check
+
+### Risk Register
+Implemented in:
+
+`src/week11_risk_register.py`
+
+Generated:
+- `docs/risk_register.csv`
+
+This file lists project risks and concrete mitigations.
+
+### Unit Tests
+Implemented in:
+
+`tests/test_week11.py`
+
+Checks include:
+- invalid configs fail
+- required Week11 artifacts exist
+- validation guards behave correctly
+
+## Generated Outputs
+
+Week11 outputs:
+- `docs/repro_metadata.json`
+- `docs/repro_audit.csv`
+- `docs/risk_register.csv`
+- `docs/final_definitions.md`
+- `docs/fastpath_summary.txt`
+
+## Validation
+Week11 validation pipeline:
+
+```powershell
+python -m src.week11_validate_configs
+python -m src.week11_capture_metadata
+python -m src.week11_repro_audit
+python -m src.week11_fastpath_run
+python -m src.week11_risk_register
+pytest -q
+```
 
