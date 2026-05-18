@@ -848,14 +848,14 @@ python -m src.week08_run_grid_methods
 python -m src.week08_make_plots
 pytest -q
 ````
-# Week 09 — Proposed Method + Robustness Stress Tests
+# Week 09 — Refined Proposed Method + Robustness Stress Tests
 
 ## Goal
-Implement a proposed residual-learning method and compare it against the three baselines under robustness stress tests for timing/orbit-phase, missingness, and noise.
+Refine the proposed residual-learning method and compare it against the three baselines under robustness stress tests for timing/orbit-phase, missingness, and noise.
 
 ## Implemented Components
 
-### Proposed Method
+### Proposed Method (Refined v2)
 Implemented in:
 
 `src/proposed_method.py`
@@ -864,7 +864,8 @@ This method:
 - fits a periodic baseline on training data only
 - estimates expected residual behavior
 - computes residual-based anomaly scores
-- detects faults on residuals
+- uses stronger thresholding
+- applies additional smoothing and minimum-event filtering
 
 ### Stress Run Generation
 Implemented in:
@@ -885,7 +886,7 @@ Methods included:
 - baseline-1: raw threshold
 - baseline-2: residual threshold
 - baseline-3: ML reconstruction
-- proposed: residual learning
+- proposed: residual learning refined v2
 
 Output:
 - `data/runs/week09_stress_results.csv`
@@ -935,11 +936,12 @@ Stress run folders:
 - `data/runs/RS03/`
 
 ## Key Observations
-- baseline-3 remains the strongest overall balanced method
-- the proposed method achieved very high recall across all stress settings
-- however, the proposed method currently suffers from excessive false alarm burden
-- missingness and noise are particularly difficult for the proposed method
-- Week09 therefore shows a strong robustness trade-off rather than a clean proposed-method win
+- baseline-3 remains the strongest balanced baseline overall
+- the refined proposed method is substantially better than the earlier Week09 prototype
+- under timing/orbit-phase stress (`RS01`), the refined proposed method achieved the highest EventF1
+- under missingness (`RS02`), the refined proposed method became nearly tied with baseline-3
+- under noise (`RS03`), the refined proposed method remained slightly below baseline-3 but was much improved relative to the earlier prototype
+- early-alarm behavior is visible in some negative MDD cases and should be interpreted carefully
 
 ## Reproduce Week09
 
@@ -951,3 +953,6 @@ python -m src.week09_run_comparison
 python -m src.week09_tradeoff_plots
 python -m src.week09_main_table
 pytest -q
+```
+
+
